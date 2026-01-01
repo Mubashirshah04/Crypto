@@ -40,7 +40,7 @@ const App: React.FC = () => {
       ]);
       
       setCoins(coinsData);
-      setWatchlist(watchlistData.map(item => item.coin_id));
+      setWatchlist(watchlistData.map((item: any) => item.coin_id));
       
       if (!selectedCoin && coinsData.length > 0) {
         setSelectedCoin(coinsData[0]);
@@ -61,7 +61,6 @@ const App: React.FC = () => {
   const stats = useMemo<DashboardStats>(() => {
     if (coins.length === 0) return { totalMarketCap: 0, totalVolume: 0, avgChange24h: 0, topGainer: null };
     
-    // Corrected: Changed 'once' to 'reduce' to prevent runtime crash
     const totalMarketCap = coins.reduce((acc, coin) => acc + (coin.market_cap || 0), 0);
     const totalVolume = coins.reduce((acc, coin) => acc + (coin.total_volume || 0), 0);
     const avgChange24h = coins.reduce((acc, coin) => acc + (coin.price_change_percentage_24h || 0), 0) / coins.length;
