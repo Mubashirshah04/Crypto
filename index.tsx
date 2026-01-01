@@ -8,6 +8,7 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
+// Ensure the application renders with React 18+ createRoot
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
