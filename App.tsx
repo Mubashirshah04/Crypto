@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
   BarChart, 
@@ -62,11 +61,11 @@ const App: React.FC = () => {
   const stats = useMemo<DashboardStats>(() => {
     if (coins.length === 0) return { totalMarketCap: 0, totalVolume: 0, avgChange24h: 0, topGainer: null };
     
-    // Fixed Error: Changed 'once' to 'reduce'
-    const totalMarketCap = coins.reduce((acc, coin) => acc + coin.market_cap, 0);
-    const totalVolume = coins.reduce((acc, coin) => acc + coin.total_volume, 0);
-    const avgChange24h = coins.reduce((acc, coin) => acc + coin.price_change_percentage_24h, 0) / coins.length;
-    const topGainer = [...coins].sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)[0];
+    // Corrected: Changed 'once' to 'reduce' to prevent runtime crash
+    const totalMarketCap = coins.reduce((acc, coin) => acc + (coin.market_cap || 0), 0);
+    const totalVolume = coins.reduce((acc, coin) => acc + (coin.total_volume || 0), 0);
+    const avgChange24h = coins.reduce((acc, coin) => acc + (coin.price_change_percentage_24h || 0), 0) / coins.length;
+    const topGainer = [...coins].sort((a, b) => (b.price_change_percentage_24h || 0) - (a.price_change_percentage_24h || 0))[0];
 
     return { totalMarketCap, totalVolume, avgChange24h, topGainer };
   }, [coins]);
@@ -155,7 +154,6 @@ const App: React.FC = () => {
   return (
     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
       <div className="space-y-8">
-        {/* Title Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">Market Overview</h1>
@@ -182,7 +180,6 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {/* KPI Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <KPICard 
             title="Total Market Cap" 
@@ -212,7 +209,6 @@ const App: React.FC = () => {
           />
         </div>
 
-        {/* Analytics Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
@@ -276,7 +272,6 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Table Section */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
           <div className="p-6 border-b border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <h2 className="text-xl font-bold text-white">Market Statistics</h2>
